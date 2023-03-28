@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type {
-  BaseContract,
+  Contract,
   BigNumber,
   BytesLike,
   CallOverrides,
@@ -34,7 +34,7 @@ export interface OwnableInterface extends utils.Interface {
   events: {};
 }
 
-export interface Ownable extends BaseContract {
+export interface Ownable extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

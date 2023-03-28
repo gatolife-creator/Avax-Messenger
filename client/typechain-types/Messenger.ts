@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type {
-  BaseContract,
+  Contract,
   BigNumber,
   BigNumberish,
   BytesLike,
@@ -169,7 +169,7 @@ export type NumOfPendingLimitsChangedEvent = TypedEvent<
 export type NumOfPendingLimitsChangedEventFilter =
   TypedEventFilter<NumOfPendingLimitsChangedEvent>;
 
-export interface Messenger extends BaseContract {
+export interface Messenger extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
