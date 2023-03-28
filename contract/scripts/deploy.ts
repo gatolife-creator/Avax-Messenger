@@ -1,24 +1,35 @@
 import { ethers } from "hardhat";
+import { Overrides } from 'ethers';
 
-async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+async function deploy() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying contract with the account:", deployer.address);
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  const numOfPendingLimits = 10;
+  const funds = 100;
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const Messenger = await ethers.getContractFactory("Messenger");
+  const messenger = await Messenger.deploy(numOfPendingLimits, {
+    value: funds
+  } as Overrides);
 
-  await lock.deployed();
+  await messenger.deployed();
 
+  console.log("Contract deployed at:", messenger.address);
+  console.log("Contract's owner is:", await messenger.owner());
   console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    "Contract's number of pending message limits is:",
+    await messenger.numOfPendingLimits()
   );
-}
+  console.log(
+    "Contract's fund is:",
+    await messenger.provider.getBalance(messenger.address)
+  );
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+}
+deploy()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
